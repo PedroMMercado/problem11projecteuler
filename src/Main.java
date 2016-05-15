@@ -14,26 +14,11 @@ public class Main {
 		try {
 			// get file
 			Scanner input = new Scanner(new File("input.txt"));
-			System.out.println(array.length);
 			while(input.hasNextLine()){
 				list.add(input.nextLine().split(" "));
 			}
 			populateArray(array, list);
-			System.out.println(array[0][0]);
-			
-			
-			// gets 20 x 20 array from input file
-//			for(int i = 0; i < array.length;i++){
-//				for(int j = 0; j < array[i].length;j++){
-//					if(input.hasNextLine()){
-//						String [] temp = input.nextLine().split(" ");
-//						array[i][j] = input.nextLine();
-//						System.out.println(array[i][j]);
-//					}
-//				}
-//			}
-//			
-//			largestProduct(array);
+			System.out.println("Largest Product is " + largestProduct(array));
 			
 			input.close();
 		} catch (FileNotFoundException e) {
@@ -42,7 +27,50 @@ public class Main {
 	}
 	
 	public static int largestProduct(int [][] array){
-		return 1;
+		int product = 1;
+		int largest = -1;
+		
+		for(int i = 0; i < array.length; i++){
+            for(int j = 0; j < array[i].length - 3; j++){
+                product = array[i][j] * array[i][j + 1] * array[i][j + 2] * array[i][j + 3];
+                if(product > largest){
+                    largest = product;
+                }
+            }   
+        }
+		
+        
+       // Check vertically
+       for(int i = 0; i < array.length - 3; i ++){
+           for(int j = 0; j < array[i].length; j++){
+               product = array[i][j] * array[i + 1][j] * array[i + 2][j] * array[i + 3][j];
+               if(product > largest){
+                   largest = product;
+               }
+           }
+       }
+       
+       // Check diagonally right
+       for(int i = 0; i < array.length - 3; i++){
+           for(int j = 0; j < array[i].length - 3; j++){
+               product = array[i][j] * array[i + 1][j + 1] * array[i + 2][j + 2] * array[i + 3][i + 3];
+               if(product > largest){
+                   largest = product;
+               }
+           }
+       }
+       
+    // Check diagonally left
+       for(int i = 0; i < array.length - 3; i ++){
+           for(int j = 3; j < array[i].length; j ++){
+               product = array[i][j] * array[i + 1][j - 1] * array[i + 2][j  - 2] * array[i + 3][j - 3];
+               if(product > largest){
+                   largest = product;
+               }
+           }
+       }
+       
+       return largest;
 	}
 	
 	public static void populateArray(int [][] array, ArrayList<String[]> list){
@@ -50,44 +78,11 @@ public class Main {
 		for(int i = 0; i < array.length;i++){
 			for(int j = 0; j < array[i].length;j++){
 				if(list.get(i)[j].charAt(0) == '0')
-					array[i][j] = Character.getNumericValue(list.get(0)[0].charAt(1));
+					array[i][j] = Character.getNumericValue(list.get(i)[j].charAt(1));
 				else
-					array[i][j] = Integer.parseInt(list.get(0)[0]);
+					array[i][j] = Integer.parseInt(list.get(i)[j]);
 			}
-		}
+		} 
 	}
 	
-	// todo
-	public static int largestProduct(String [][] array){
-		// stores temporary string tokens
-		String temp = "";
-		String[] tempArray;
-		// check horizonal
-		int maxProduct = 1;
-		for(int i = 0; i < array.length;i++){
-			// needed to keep track of  4 adjacent values
-			int count = 0;
-			for(int j = 0; j < array[i].length;j++){
-				tempArray = array[i][j].split(" ");
-				int tempProduct = 1;
-				for(int k = 0; k < tempArray.length;k++){
-					if(count == 4)
-						break;
-					int num;
-					if(tempArray[k].charAt(0) == '0')
-						num = Character.getNumericValue(tempArray[k].charAt(1));
-					else
-						num = Integer.parseInt(tempArray[k]);
-					tempProduct = tempProduct * num;
-					count++;	
-				}
-				if(tempProduct > maxProduct)
-					maxProduct = tempProduct;
-			}
-			count = 0;
-			maxProduct = 1;
-		}
-		return 1;
-	}
-
 }
